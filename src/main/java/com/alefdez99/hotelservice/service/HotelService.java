@@ -1,23 +1,13 @@
 package com.alefdez99.hotelservice.service;
 
 import com.alefdez99.hotelservice.model.Hotel;
-import com.alefdez99.hotelservice.repository.HotelRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
-@RequiredArgsConstructor
-public class HotelService {
+public interface HotelService {
 
-    private final HotelRepository hotelRepository;
-
-    public List<Hotel> findAll() {
-        return hotelRepository.findAll();
-    }
-
-    public Hotel save(Hotel hotel) {
-        return hotelRepository.save(hotel);
-    }
+    List<Hotel> findAll();
+    Hotel findById(Long id);
+    Hotel save(Hotel hotel);
+    void delete(Long id);
 }

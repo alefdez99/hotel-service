@@ -15,6 +15,9 @@ public class Hotel {
     private Long id;
 
     private String name;
-    private String city;
-    private Integer stars;
+
+    private Integer stars; // 1-5
+
+    @Embedded
+    private Address address;
 }
