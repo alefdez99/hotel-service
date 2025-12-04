@@ -1,10 +1,16 @@
 package com.alefdez99.hotelservice.service.impl;
 
+import com.alefdez99.hotelservice.exception.ResourceNotFoundException;
+import com.alefdez99.hotelservice.model.Address;
 import com.alefdez99.hotelservice.model.Hotel;
 import com.alefdez99.hotelservice.repository.HotelRepository;
 import com.alefdez99.hotelservice.service.HotelService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
 
@@ -20,10 +26,18 @@ public class HotelServiceImpl implements HotelService {
     }
 
     @Override
+    public Page<Hotel> findAllPaged(int page, int size, String sortBy) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        return hotelRepository.findAll(pageable);
+    }
+
+
+    @Override
     public Hotel findById(Long id) {
         return hotelRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Hotel not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Hotel not found with ID " + id));
     }
+
 
     @Override
     public Hotel save(Hotel hotel) {
@@ -32,6 +46,21 @@ public class HotelServiceImpl implements HotelService {
 
     @Override
     public void delete(Long id) {
+        if (!hotelRepository.existsById(id)) {
+            throw new RuntimeException("Hotel not found with id: " + id);
+        }
         hotelRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Hotel> findByCity(String city) {
+        return hotelRepository.findByAddressCityIgnoreCase(city);
+    }
+
+    @Override
+    public Hotel updateAddress(Long id, Address newAddress) {
+        Hotel hotel = findById(id);
+        hotel.setAddress(newAddress);
+        return hotelRepository.save(hotel);
     }
 }
