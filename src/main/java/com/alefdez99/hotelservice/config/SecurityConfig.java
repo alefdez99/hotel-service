@@ -18,12 +18,14 @@ public class SecurityConfig {
     // Usuarios en memoria
     @Bean
     public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
-
+        
+        // Usuario con permisos básicos
         UserDetails user = User.withUsername("user")
                 .password(passwordEncoder.encode("password"))
                 .roles("USER")
                 .build();
 
+        // Usuario administrador        
         UserDetails admin = User.withUsername("admin")
                 .password(passwordEncoder.encode("adminpass"))
                 .roles("ADMIN")
@@ -36,11 +38,11 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http
-                .csrf(csrf -> csrf.disable())  // Nueva sintaxis
+                .csrf(csrf -> csrf.disable())  // CSRF deshabilitado para APIs y pruebas
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/h2-console/**").permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "/api/hotels/**").hasRole("ADMIN")
-                        .anyRequest().authenticated()
+                        .requestMatchers("/h2-console/**").permitAll() // La consola de H2 debe ser accesible sin autenticación
+                        .requestMatchers(HttpMethod.DELETE, "/api/hotels/**").hasRole("ADMIN") // Restricción: solo ADMIN puede eliminar hoteles
+                        .anyRequest().authenticated() // Cualquier otra solicitud requiere autenticación
                 )
                 .httpBasic(httpBasic -> {})  // Nueva sintaxis
                 .headers(headers -> headers.frameOptions(frame -> frame.disable())); // Para H2 Console

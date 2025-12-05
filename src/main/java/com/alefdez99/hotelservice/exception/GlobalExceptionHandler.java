@@ -10,7 +10,7 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-
+    // Maneja excepciones ResourceNotFoundException y devuelve un 404 con detalles    
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<Map<String, Object>> handleNotFound(ResourceNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
@@ -22,6 +22,7 @@ public class GlobalExceptionHandler {
         );
     }
 
+    // Maneja cualquier otra excepción no controlada y devuelve un 500 con detalles
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, Object>> handleGeneral(Exception ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(

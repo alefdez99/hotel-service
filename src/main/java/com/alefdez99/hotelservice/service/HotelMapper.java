@@ -5,6 +5,7 @@ import com.alefdez99.hotelservice.model.*;
 
 public class HotelMapper {
 
+    // Convierte HotelCreateDto a entidad Hotel    
     public static Hotel toEntity(HotelCreateDto dto) {
         return Hotel.builder()
                 .name(dto.getName())
@@ -18,6 +19,7 @@ public class HotelMapper {
                 .build();
     }
 
+    // Convierte entidad Hotel a HotelResponseDto
     public static HotelResponseDto toDto(Hotel hotel) {
         return HotelResponseDto.builder()
                 .id(hotel.getId())

@@ -1,6 +1,6 @@
 package com.alefdez99.hotelservice.controller;
 
-import com.alefdez99.hotelservice.dto.AddressUpdateDto;
+import com.alefdez99.hotelservice.dto.AddressDto;
 import com.alefdez99.hotelservice.dto.HotelCreateDto;
 import com.alefdez99.hotelservice.exception.ResourceNotFoundException;
 import com.alefdez99.hotelservice.model.Address;
@@ -119,7 +119,7 @@ class HotelControllerTest {
     @Test
     @WithMockUser(username = "user", roles = "USER")
     void testUpdateAddress() throws Exception {
-        AddressUpdateDto dto = new AddressUpdateDto("New St", "Madrid", "España", "28002");
+        AddressDto dto = new AddressDto("New St", "Madrid", "España", "28002");
 
         Hotel updated = sampleHotel();
         updated.getAddress().setStreet("New St");

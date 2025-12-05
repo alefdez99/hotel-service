@@ -18,22 +18,24 @@ import java.util.List;
 @RequiredArgsConstructor
 public class HotelServiceImpl implements HotelService {
 
+    // Repositorio JPA para acceder a los datos de hoteles
     private final HotelRepository hotelRepository;
 
     @Override
     public List<Hotel> findAll() {
-        return hotelRepository.findAll();
+        return hotelRepository.findAll(); // Obtiene todos los hoteles de la base de datos (sin paginación)
     }
 
     @Override
     public Page<Hotel> findAllPaged(int page, int size, String sortBy) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
-        return hotelRepository.findAll(pageable);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy)); // Configura la paginación y ordenación
+        return hotelRepository.findAll(pageable); // Obtiene hoteles paginados y ordenados
     }
 
 
     @Override
     public Hotel findById(Long id) {
+        // Busca hotel por ID o lanza una excepción si no existe
         return hotelRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Hotel not found with ID " + id));
     }
@@ -41,26 +43,27 @@ public class HotelServiceImpl implements HotelService {
 
     @Override
     public Hotel save(Hotel hotel) {
-        return hotelRepository.save(hotel);
+        return hotelRepository.save(hotel); // Guarda un nuevo hotel en la base de datos
     }
 
     @Override
     public void delete(Long id) {
+        // Elimina un hotel por su ID, lanzando excepción si no existe
         if (!hotelRepository.existsById(id)) {
-            throw new RuntimeException("Hotel not found with id: " + id);
+            throw new ResourceNotFoundException("Hotel not found with id: " + id);
         }
         hotelRepository.deleteById(id);
     }
 
     @Override
     public List<Hotel> findByCity(String city) {
-        return hotelRepository.findByAddressCityIgnoreCase(city);
+        return hotelRepository.findByAddressCityIgnoreCase(city); // Busca hoteles filtrando por ciudad (ignorando mayúsculas/minúsculas)
     }
 
     @Override
     public Hotel updateAddress(Long id, Address newAddress) {
         Hotel hotel = findById(id);
         hotel.setAddress(newAddress);
-        return hotelRepository.save(hotel);
+        return hotelRepository.save(hotel); // Actualiza la dirección de un hotel existente
     }
 }
